@@ -1,0 +1,62 @@
+import universidad.*
+import profesionales.*
+import empresa.*
+describe "tests etapa 1" {
+	const sanMartin = new Universidad()
+	const rosario = new Universidad()
+	const corrientes = new Universidad()
+	const hurlingam = new Universidad()
+	const juana = new ProfesionalVinculado()
+	const melina = new ProfesionalAsociado()
+	const rocio = new ProfesionalLibre()
+	const luciana = new ProfesionalLibre()
+	const empresa = new Empresa()
+	fixture{
+		sanMartin.provincia("Buenos Aires")
+		rosario.provincia("Santa Fe")
+		corrientes.provincia("Corrientes")
+		hurlingam.provincia("Buenos Aires")
+		sanMartin.honorariosRecomendados(3500)
+		rosario.honorariosRecomendados(2800)
+		corrientes.honorariosRecomendados(4200)
+		hurlingam.honorariosRecomendados(8800)
+		
+		juana.universidad(rosario)
+		melina.universidad(corrientes)
+		rocio.universidad(hurlingam)
+		luciana.universidad(rosario)
+		rocio.honorariosPorHora(5000)
+		luciana.honorariosPorHora(3200)
+		rocio.provinciasDondePuedeTrabajar(#{ "Santa Fe", "Cordoba", "Buenos Aires" })
+		luciana.provinciasDondePuedeTrabajar(#{ "Santa Fe", "Entre Rios" })
+		
+		empresa.honorarioDeReferencia(3500)
+		empresa.contratar(juana)
+		empresa.contratar(melina)
+		empresa.contratar(rocio)
+		empresa.contratar(luciana)
+	}
+	test "test de profesionalesCaros" {
+		assert.equals(#{ rocio }, empresa.profesionalesCaros())
+	}
+	
+	test "test de universidadesFormadoras" {
+		assert.equals(#{ rosario, hurlingam, corrientes }, empresa.universidadesFormadoras())
+	}
+	test "test de profesionalMasBarato" {
+		assert.equals(juana, empresa.profesionalMasBarato())
+	}
+	test "test de estaCubierta"{
+		assert.that(empresa.estaCubierta("Santa Fe"))
+		assert.that(empresa.estaCubierta("Cordoba"))
+		assert.notThat(empresa.estaCubierta("Misiones"))
+	}
+	test "test de cantidadDeProfesionalesFormadosEn"{
+		assert.equals(2, empresa.cantidadDeProfesionalesFormadosEn(rosario))
+		assert.equals(1, empresa.cantidadDeProfesionalesFormadosEn(hurlingam))
+		assert.equals(0, empresa.cantidadDeProfesionalesFormadosEn(sanMartin))
+	}
+	test "test de esProfesionalPocoAtractivo"{
+		assert.that(empresa.esProfesionalPocoAtractivo(luciana))
+	}
+}
