@@ -3,7 +3,12 @@ class Empresa {
 	const profesionales = #{}
 	const clientes = #{}
 	method puedeSatisfacerA(solicitante){
-		return if(solicitante.esPersona()) self.estaCubierta(solicitante.provincia()) else profesionales.any { profesional => solicitante.universidades().contains(profesional.universidad()) }
+		// TODO GRAVE. Debería usar polimorfismo entre personas y empresas.
+		return if(solicitante.esPersona()) self.estaCubierta(solicitante.provincia()) 
+			else profesionales.any { profesional => 
+				// TODO Repite código.
+				solicitante.universidades().contains(profesional.universidad())
+			}
 	}
 	
 	method darServicio(solicitante){
@@ -26,6 +31,7 @@ class Empresa {
 	}
 	
 	method profesionalPara(solicitante){
+		// TODO Grave, no usa polimorfismo y repite código
 		if(solicitante.esPersona()){
 			return profesionales.find { profesional => profesional.provinciasDondePuedeTrabajar().contains(solicitante.provincia())  }
 		}
@@ -52,13 +58,14 @@ class Empresa {
 	method cantidadDeProfesionalesFormadosEn(universidad){
 		return profesionales.count { profesional => profesional.universidad() == universidad }
 	}
+
+	// TODO Dividir en subtareas
 	method esProfesionalPocoAtractivo(profesionalAEvaluar){
-		return profesionalAEvaluar.provinciasDondePuedeTrabajar().all { provincia =>
-																		profesionales.any { profesional => 
-																							profesional.provinciasDondePuedeTrabajar().contains(provincia)
-																							and (profesional.honorariosPorHora() < profesionalAEvaluar.honorariosPorHora())
-																							}
-																		}
-		
+		return profesionalAEvaluar.provinciasDondePuedeTrabajar().all { provincia => 
+			profesionales.any { profesional => 
+				profesional.provinciasDondePuedeTrabajar().contains(provincia)
+				and (profesional.honorariosPorHora() < profesionalAEvaluar.honorariosPorHora())
+			}
+		}
 	}
 }

@@ -2,7 +2,11 @@ import universidad.*
 import profesionales.*
 import empresa.*
 describe "tests etapa 1" {
-	const sanMartin = new Universidad()
+	// TODO Si lo hacés de esta forma queda mucho más fácil de leer:
+	const sanMartin = new Universidad(
+		provincia = "Buenos Aires",
+		honorariosRecomendados = 3500
+	)
 	const rosario = new Universidad()
 	const corrientes = new Universidad()
 	const hurlingam = new Universidad()
@@ -12,11 +16,9 @@ describe "tests etapa 1" {
 	const luciana = new ProfesionalLibre()
 	const empresa = new Empresa()
 	fixture{
-		sanMartin.provincia("Buenos Aires")
 		rosario.provincia("Santa Fe")
 		corrientes.provincia("Corrientes")
 		hurlingam.provincia("Buenos Aires")
-		sanMartin.honorariosRecomendados(3500)
 		rosario.honorariosRecomendados(2800)
 		corrientes.honorariosRecomendados(4200)
 		hurlingam.honorariosRecomendados(8800)
